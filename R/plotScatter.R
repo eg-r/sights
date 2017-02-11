@@ -2,8 +2,10 @@
 #'
 #' @description Construct a scatter plot of all pairwise combinations of replicates
 #'
-#' @inheritParams plotBox
+#' @param plotMatrix Data frame or numeric matrix. Columns are plates, and rows are plate wells.
 #' @param plotRows,plotCols Optional integer vector. Indicate which row/column numbers from the plotMatrix should be plotted. If NULL then all rows/columns from the plotMatrix are used.
+#' @param plotName Optional. Name of plotMatrix for plot title.
+#' @param repIndex Vector of labels indicating replicate group. Each index in the vector matches the corresponding column of plotMatrix.
 #' @param ... Optional. Additional parameters passed to \code{\link[ggplot2]{geom_point}}.
 #'
 #' @family graphical devices
@@ -39,12 +41,12 @@ plotScatter <- function(plotMatrix, repIndex, plotRows = NULL, plotCols = NULL, 
     } else {
         plotName <- paste(":", plotName)
     }
-    
+
     plotMatrix <- sightsCheck(plotMatrix, "plot", plotRows, plotCols, ri = repIndex)
-    
+
     le <- dim(plotMatrix)[[2]]
     we <- dim(plotMatrix)[[1]]
-    
+
     dat <- NULL
     names(plotMatrix) = NULL
     for (i in unique(repIndex)) {
@@ -71,18 +73,18 @@ plotScatter <- function(plotMatrix, repIndex, plotRows = NULL, plotCols = NULL, 
             ploymin <- min(ploda[stats::complete.cases(ploda$yax), 2])
             ploymax <- max(ploda[stats::complete.cases(ploda$yax), 2])
             # ploxm <- mean(ploda[complete.cases(ploda$xax),1]) ploym <- mean(ploda[complete.cases(ploda$yax),2])
-            gl[[lg]] <- ggplot2::ggplot(ploda, ggplot2::aes_string(x = "xax", y = "yax")) + ggplot2::geom_point(...) + 
-                ggplot2::geom_smooth(method = "loess", color = "blue", alpha = 0.2) + ggplot2::labs(title = paste("Scatter Plot ", 
-                plotName, " Plates ", m[l, i], "-", m[l, j], sep = ""), x = paste("Replicate", i), y = paste("Replicate", 
-                j)) + ggplot2::theme_bw() + ggplot2::theme(title = ggplot2::element_text(size = 9), axis.text = ggplot2::element_text(size = 7)) + 
-                ggplot2::coord_fixed(ratio = 1) + ggplot2::lims(x = c(min(ploxmin, ploymin), max(ploxmax, ploymax)), 
-                y = c(min(ploxmin, ploymin), max(ploxmax, ploymax))) + ggplot2::geom_abline(linetype = 2, intercept = 0, 
+            gl[[lg]] <- ggplot2::ggplot(ploda, ggplot2::aes_string(x = "xax", y = "yax")) + ggplot2::geom_point(...) +
+                ggplot2::geom_smooth(method = "loess", color = "blue", alpha = 0.2) + ggplot2::labs(title = paste("Scatter Plot ",
+                plotName, " Plates ", m[l, i], "-", m[l, j], sep = ""), x = paste("Replicate", i), y = paste("Replicate",
+                j)) + ggplot2::theme_bw() + ggplot2::theme(title = ggplot2::element_text(size = 9), axis.text = ggplot2::element_text(size = 7)) +
+                ggplot2::coord_fixed(ratio = 1) + ggplot2::lims(x = c(min(ploxmin, ploymin), max(ploxmax, ploymax)),
+                y = c(min(ploxmin, ploymin), max(ploxmax, ploymax))) + ggplot2::geom_abline(linetype = 2, intercept = 0,
                 slope = 1)
             # + ggplot2::annotate(geom = 'label', x = Inf, y = ploymin, hjust = 1, vjust = 1, alpha = 0.2, label =
             # paste('r =', round(pear, 3), 'ccc =', round(ccc, 3)))
             lg = lg + 1
         }
-        
+
     }
     message("Number of plots = ", lg - 1)
     message("Number of plates = ", ncol(plotMatrix))
