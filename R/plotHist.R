@@ -48,12 +48,12 @@ plotHist <- function(plotMatrix, plotRows = NULL, plotCols = NULL, plotAll = FAL
     
     plotMatrix <- sightsCheck(plotMatrix, "plot", plotRows, plotCols, cn = colNames)
     
-    suppressWarnings(if (!grepl("val", colnames(plotMatrix), ignore.case = TRUE)) {
+    suppressWarnings(if (any(!grepl("val", colnames(plotMatrix), ignore.case = TRUE))) {
         plotValues = "values"
     } else {
-        if (grepl("p", colnames(plotMatrix), ignore.case = TRUE)) {
+        if (any(grepl("p", colnames(plotMatrix), ignore.case = TRUE))) {
             plotValues = "p-values"
-        } else if (grepl("q", colnames(plotMatrix), ignore.case = TRUE)) {
+        } else if (any(grepl("q", colnames(plotMatrix), ignore.case = TRUE))) {
             plotValues = "q-values"
         }
     })
