@@ -64,7 +64,7 @@ statFDR <- function(testMatrix, ctrlMethod = "smoother", ...) {
         tmp <- cbind(testMatrix[, j:k], ret[, i])
         colnames(tmp)[6] <- gsub("P", "q", colnames(tmp)[5], ignore.case = TRUE)
         outMat <- cbind(outMat, tmp)
-        j = j + k
+        j = j + 5
     }
     message("Completed FDR with ", ctrlMethod, " estimation [get q-value columns: seq(", ncol(ret), ")*6 ]")
     message("Number of samples = ", ncol(ret))
